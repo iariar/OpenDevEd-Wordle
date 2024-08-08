@@ -10,7 +10,6 @@ import './App.css';
 
 const getRandomWord = () => {
   const word = generate({ exactly: 1, maxLength: 10 })[0];
-  console.log(word);
   return word.toLowerCase();
 };
 
