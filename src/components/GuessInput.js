@@ -10,6 +10,9 @@ const GuessInput = ({ onSubmit, length }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (guess.trim() === '') {
+      return;
+    }
     onSubmit(guess);
     setGuess('');
   };

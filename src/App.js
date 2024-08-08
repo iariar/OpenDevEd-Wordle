@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 import GuessInput from './components/GuessInput';
 import GuessList from './components/GuessList';
 import GameStatus from './components/GameStatus';
-import { generate } from "random-words";
-
+import Confetti from 'react-confetti';
+import { generate } from 'random-words';
 import './App.css';
 
-const word = generate({ exactly: 1 })[0]
-console.log(
-  word
-);
+const RetryButton = ({ onClick }) => {
+  return (
+    <button className="retry-button" onClick={onClick}>
+      Retry
+    </button>
+  );
+};
+
+const getRandomWord = () => {
+  const word = generate({ exactly: 1, maxLength: 10 })[0];
+  return word.toLowerCase();
+};
 
 const App = () => {
   const [targetWord, setTargetWord] = useState('');
@@ -19,14 +27,13 @@ const App = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    setTargetWord(word);
+    setTargetWord(getRandomWord());
   }, []);
 
   const handleGuess = (guess) => {
     if (gameOver) return;
 
-
-    const feedback = getFeedback(guess);
+    const feedback = getFeedback(guess.toLowerCase());
     setGuesses([...guesses, { word: guess, feedback }]);
     setAttemptsLeft(attemptsLeft - 1);
 
@@ -55,12 +62,30 @@ const App = () => {
     return feedback;
   };
 
+  const handleRetry = () => {
+    setTargetWord(getRandomWord());
+    setGuesses([]);
+    setAttemptsLeft(6);
+    setGameOver(false);
+    setMessage('');
+  };
+
   return (
     <div>
+      {gameOver && message.includes('Congratulations') && <Confetti />}
       <h1>Wordle Game</h1>
+      <div className="explanation">
+        <div><span className="color-box green"></span> Correct letter and position</div>
+        <div><span className="color-box yellow"></span> Correct letter, wrong position</div>
+        <div><span className="color-box black"></span> Incorrect letter</div>
+      </div>
+
       <GuessInput onSubmit={handleGuess} length={targetWord.length} />
       <GuessList guesses={guesses} />
       <GameStatus attemptsLeft={attemptsLeft} gameOver={gameOver} message={message} />
+      {gameOver && (
+        <RetryButton onClick={handleRetry} />
+      )}
     </div>
   );
 };
