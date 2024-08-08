@@ -2,20 +2,15 @@ import React, { useState, useEffect } from 'react';
 import GuessInput from './components/GuessInput';
 import GuessList from './components/GuessList';
 import GameStatus from './components/GameStatus';
+import RetryButton from './components/RetryButton';
+import ColorExplanation from './components/ColorExplanation';
 import Confetti from 'react-confetti';
 import { generate } from 'random-words';
 import './App.css';
 
-const RetryButton = ({ onClick }) => {
-  return (
-    <button className="retry-button" onClick={onClick}>
-      Retry
-    </button>
-  );
-};
-
 const getRandomWord = () => {
   const word = generate({ exactly: 1, maxLength: 10 })[0];
+  console.log(word);
   return word.toLowerCase();
 };
 
@@ -74,18 +69,11 @@ const App = () => {
     <div>
       {gameOver && message.includes('Congratulations') && <Confetti />}
       <h1>Wordle Game</h1>
-      <div className="explanation">
-        <div><span className="color-box green"></span> Correct letter and position</div>
-        <div><span className="color-box yellow"></span> Correct letter, wrong position</div>
-        <div><span className="color-box black"></span> Incorrect letter</div>
-      </div>
-
+      <ColorExplanation />
       <GuessInput onSubmit={handleGuess} length={targetWord.length} />
       <GuessList guesses={guesses} />
       <GameStatus attemptsLeft={attemptsLeft} gameOver={gameOver} message={message} />
-      {gameOver && (
-        <RetryButton onClick={handleRetry} />
-      )}
+      {gameOver && <RetryButton onClick={handleRetry} />}
     </div>
   );
 };
