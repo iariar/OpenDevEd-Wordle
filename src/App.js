@@ -7,12 +7,10 @@ import ColorExplanation from './components/ColorExplanation';
 import Confetti from 'react-confetti';
 import { generate } from 'random-words';
 import './App.css';
+import { isValidWord } from './utils/Validation';
 
 const getRandomWord = () => {
   const word = generate({ exactly: 1, maxLength: 10 })[0];
-  console.log('====================================');
-  console.log(word);
-  console.log('====================================');
   return word.toLowerCase();
 };
 
@@ -22,13 +20,22 @@ const App = () => {
   const [attemptsLeft, setAttemptsLeft] = useState(6);
   const [gameOver, setGameOver] = useState(false);
   const [message, setMessage] = useState('');
-
+  const [error, setError] = useState('');
+  
   useEffect(() => {
     setTargetWord(getRandomWord());
   }, []);
 
-  const handleGuess = (guess) => {
+  const handleGuess = async (guess) => {
     if (gameOver) return;
+
+    const valid = await isValidWord(guess);
+    if (!valid) {
+      setError('Enter a valid word'); 
+      return;
+    } else {
+      setError(''); 
+    }
 
     const feedback = getFeedback(guess.toLowerCase());
     setGuesses([...guesses, { word: guess, feedback }]);
@@ -65,6 +72,7 @@ const App = () => {
     setAttemptsLeft(6);
     setGameOver(false);
     setMessage('');
+    setError('');
   };
 
   return (
@@ -72,7 +80,10 @@ const App = () => {
       {gameOver && message.includes('Congratulations') && <Confetti />}
       <h1>Guess the Word</h1>
       <ColorExplanation />
-      <GuessInput onSubmit={handleGuess} length={targetWord.length} />
+      <div className="input-container">
+        <GuessInput onSubmit={handleGuess} length={targetWord.length} />
+        {error && <p className="error-message">{error}</p>}
+      </div>
       <GuessList guesses={guesses} />
       <GameStatus attemptsLeft={attemptsLeft} gameOver={gameOver} message={message} />
       {gameOver && <RetryButton onClick={handleRetry} />}
