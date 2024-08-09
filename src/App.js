@@ -10,6 +10,9 @@ import './App.css';
 
 const getRandomWord = () => {
   const word = generate({ exactly: 1, maxLength: 10 })[0];
+  console.log('====================================');
+  console.log(word);
+  console.log('====================================');
   return word.toLowerCase();
 };
 
@@ -67,7 +70,7 @@ const App = () => {
   return (
     <div>
       {gameOver && message.includes('Congratulations') && <Confetti />}
-      <h1>Wordle Game</h1>
+      <h1>Guess the Word</h1>
       <ColorExplanation />
       <GuessInput onSubmit={handleGuess} length={targetWord.length} />
       <GuessList guesses={guesses} />

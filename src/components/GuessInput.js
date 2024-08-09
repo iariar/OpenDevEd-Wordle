@@ -25,9 +25,10 @@ const GuessInput = ({ onSubmit, length }) => {
         onChange={handleChange}
         maxLength={length}
         placeholder="Enter your guess"
-        className={styles.input}
+        className={styles.custom_input}
       />
-      <button type="submit" className={styles.button}>Submit</button>
+      <button type="submit" className={styles.custom_button}>Guess</button>
+
     </form>
   );
 };

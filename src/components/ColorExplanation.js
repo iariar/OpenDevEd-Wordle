@@ -1,12 +1,12 @@
 import React from 'react';
-import './ColorExplanation.css';
+import styles from './ColorExplanation.module.css';
 
 const ColorExplanation = () => {
   return (
-    <div className="explanation">
-      <div><span className="color-box green"></span> Correct letter and position</div>
-      <div><span className="color-box yellow"></span> Correct letter, wrong position</div>
-      <div><span className="color-box black"></span> Incorrect letter</div>
+    <div className={styles.explanation}>
+      <div><span className={`${styles.colorBox} ${styles.green}`}></span> Correct letter and position</div>
+      <div><span className={`${styles.colorBox} ${styles.yellow}`}></span> Correct letter, wrong position</div>
+      <div><span className={`${styles.colorBox} ${styles.black}`}></span> Incorrect letter</div>
     </div>
   );
 };
