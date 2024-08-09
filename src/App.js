@@ -10,7 +10,12 @@ import './App.css';
 import { isValidWord } from './utils/Validation';
 
 const getRandomWord = () => {
-  const word = generate({ exactly: 1, maxLength: 10 })[0];
+  let word = '';
+
+  while (word.length !== 5) {
+    word = generate({ exactly: 1 })[0];
+  }
+
   return word.toLowerCase();
 };
 
@@ -21,7 +26,7 @@ const App = () => {
   const [gameOver, setGameOver] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  
+
   useEffect(() => {
     setTargetWord(getRandomWord());
   }, []);
